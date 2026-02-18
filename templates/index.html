@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>LAB-AI — загрузка анализов</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f5f7fa;margin:0;padding:24px;color:#111827}
+    .box{max-width:900px;margin:auto;background:#fff;border-radius:12px;padding:24px;box-shadow:0 10px 25px rgba(0,0,0,.06)}
+    h1{margin:0 0 12px;font-size:22px}
+    label{display:block;margin:12px 0 6px;font-weight:600}
+    input,select,textarea{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:10px;font-size:14px}
+    textarea{min-height:160px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .hint{color:#6b7280;font-size:13px;margin-top:6px}
+    button{margin-top:14px;padding:12px 16px;border:0;border-radius:10px;background:#111827;color:#fff;font-weight:700;cursor:pointer}
+    .flash{background:#fff7ed;border-left:4px solid #f97316;padding:10px 12px;border-radius:8px;margin:12px 0}
+    .or{margin:12px 0;color:#6b7280}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>LAB-AI — расшифровка анализов (MVP)</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div class="flash">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="/analyze" enctype="multipart/form-data">
+      <div class="row">
+        <div>
+          <label>Пол</label>
+          <select name="sex" required>
+            <option value="м">м</option>
+            <option value="ж">ж</option>
+          </select>
+        </div>
+        <div>
+          <label>Возраст</label>
+          <input name="age" inputmode="numeric" placeholder="например 39" required />
+        </div>
+      </div>
+
+      <label>Загрузить PDF или фото анализов</label>
+      <input type="file" name="file" accept=".pdf,image/*" />
+      <div class="hint">Поддержка: PDF, JPG/JPEG, PNG, WEBP (в MVP).</div>
+
+      <div class="or">— или —</div>
+
+      <label>Вставить текст анализов</label>
+      <textarea name="raw_text" placeholder="ALT 41 1.6–40 U/l"></textarea>
+
+      <button type="submit">Сформировать отчёт</button>
+      <div class="hint">Сервис не ставит диагнозы и не назначает лечение.</div>
+    </form>
+  </div>
+</body>
+</html>
